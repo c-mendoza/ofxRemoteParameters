@@ -11,7 +11,7 @@
 
 namespace ofxRemoteParameters
 {
-	class Client : public ofThread
+	class Client
 	{
 	public:
 		bool setup(ofParameterGroup& parameterGroup, std::string serverAddress, int serverInPort = DefaultServerInPort, int serverOutPort = DefaultServerOutPort);
@@ -25,7 +25,6 @@ namespace ofxRemoteParameters
 		ofEventListener loopListener;
 		std::shared_ptr<ofParameterGroup> parameterGroup;
 	protected:
-		void threadedFunction() override;
 		void parseReceivedMessage(ofxOscMessage& message);
 		void parseModel(std::string basicString);
 	};

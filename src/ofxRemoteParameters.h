@@ -14,7 +14,7 @@ namespace ofxRemoteParameters
 	const std::string ApiResponse = "ofxpsResponse";
 	const std::string MethodGetModel = "getModel";
 	const std::string MethodConnect = "connect";
-	const int DefaultServerOutPort = 120001;
+	const int DefaultServerOutPort = 12001;
 	const int DefaultServerInPort = 12000;
 
 	std::vector<std::string> getLocalIPs();
