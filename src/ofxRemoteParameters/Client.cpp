@@ -15,7 +15,11 @@ bool Client::setup(ofParameterGroup& parameterGroup, std::string serverAddress, 
 
 	if (success)
 	{
-		success = oscReceiver.setup(serverOutPort);
+		ofxOscReceiverSettings settings;
+		settings.port = serverOutPort;
+		settings.reuse = true;
+		settings.start = true;
+		success = oscReceiver.setup(settings);
 	}
 	else
 	{
@@ -32,17 +36,13 @@ bool Client::setup(ofParameterGroup& parameterGroup, std::string serverAddress, 
 	loopListener = ofGetMainLoop()->loopEvent.newListener([this](){
 
 		ofxOscMessage message;
-		while(oscReceiver.getNextMessage(message))
+		while(oscReceiver.hasWaitingMessages())
 		{
+			oscReceiver.getNextMessage(message);
 			parseReceivedMessage(message);
 		}
 	});
 	return success;
-}
-
-void Client::threadedFunction()
-{
-	ofThread::threadedFunction();
 }
 
 void Client::parseReceivedMessage(ofxOscMessage& m)
