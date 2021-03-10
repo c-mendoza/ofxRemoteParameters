@@ -1,3 +1,3 @@
 ofxGui
-ofxParameterCollection
-ofxParameterServer
+ofxOsc
+ofxRemoteParameters

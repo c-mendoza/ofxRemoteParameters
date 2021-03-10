@@ -1,10 +1,8 @@
 #pragma once
 
 #include "ofMain.h"
-#include "ofxParameterCollection.h"
 #include "ofxGui.h"
-#include "ofxParameterServer.h"
-
+#include "ofxRemoteParameters/Server.h"
 class ofApp : public ofBaseApp {
 	
 public:
@@ -12,7 +10,7 @@ public:
 	void draw();
 
 	ofxPanel gui;
-	ofxParameterServer paramServer;
+	ofxRemoteParameters::Server paramServer;
 	ofParameterGroup mainGroup;
 	ofParameter<glm::vec2> circlePosition;
 	ofParameter<float> circleRadius;
