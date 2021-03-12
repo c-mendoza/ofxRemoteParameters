@@ -6,7 +6,7 @@
 
 using namespace ofxRemoteParameters;
 
-const std::string Server::ModuleName = "ofxRemoteParameters - Server";
+const std::string Server::ModuleName = "ofxRemoteParameters::Server";
 const std::string Server::AttributeName_UiName = "uiName";
 const std::string Server::AttributeName_Name = "name";
 const std::string Server::AttributeName_Type = "type";
@@ -20,21 +20,21 @@ Server::Server() : ofThread()
 	addServerMethod(ServerMethod(
 			"getModel",
 			"Get model",
-			[this](ServerMethod& method, ofxOscMessage& m, Server& server)
+			[this](ServerMethod& method, ofxOscMessage& inMessage, Server& server)
 			{
 				ofxOscMessage outMessage;
 				auto xml = createMetaModel();
 				outMessage.addStringArg(xml.toString());
-				outMessage.setRemoteEndpoint(m.getRemoteHost(), outPort);
+				outMessage.setRemoteEndpoint(inMessage.getRemoteHost(), outPort);
 				server.sendReply(method, outMessage);
 			}));
 
 	addServerMethod(ServerMethod(
 			"connect",
 			"Connect",
-			[this](ServerMethod& method, ofxOscMessage& m, Server& server)
+			[this](ServerMethod& method, ofxOscMessage& inMessage, Server& server)
 			{
-				oscSender.setup(m.getRemoteHost(), outPort);
+				oscSender.setup(inMessage.getRemoteHost(), outPort);
 				ofxOscMessage outMessage;
 				outMessage.addStringArg("OK");
 				server.sendReply(method, outMessage);
@@ -43,19 +43,19 @@ Server::Server() : ofThread()
 	addServerMethod(ServerMethod(
 			"set",
 			"Set parameter",
-			[this](ServerMethod& method, ofxOscMessage& m, Server& server)
+			[this](ServerMethod& method, ofxOscMessage& inMessage, Server& server)
 			{
-				if (m.getNumArgs() != 2)
+				if (inMessage.getNumArgs() != 2)
 				{
 					ofLogError(ModuleName)
 							<< "Tried to set parameter but OSC Message did not have the right number of arguments.";
 					return;
 				}
 				ParameterData pd;
-				pd.parameterPath = m.getArgAsString(0);
-				pd.parameterValue = m.getArgAsString(1);
+				pd.parameterPath = inMessage.getArgAsString(0);
+				pd.parameterValue = inMessage.getArgAsString(1);
 				parameterThreadChannel.send(std::move(pd));
-//				setParameter(m.getArgAsString(0), m.getArgAsString(1));
+//				setParameter(inMessage.getArgAsString(0), inMessage.getArgAsString(1));
 			}));
 
 
@@ -85,7 +85,6 @@ Server::Server() : ofThread()
 
 Server::~Server()
 {
-	waitForThread();
 	oscReceiver.stop();
 	oscSender.clear();
 }
@@ -95,6 +94,10 @@ void Server::setup(ofParameterGroup& parameters,
 				   int outPort)
 {
 	group = std::make_shared<ofParameterGroup>(parameters);
+	if (group->getName().empty())
+	{
+		group->setName("ofxRemoteParameters");
+	}
 	oscReceiver.setup(inPort);
 	this->inPort = inPort;
 	this->outPort = outPort;
@@ -105,28 +108,39 @@ void Server::setup(ofParameterGroup& parameters,
 	// Also TODO:
 	// Implement mechanism for server-initiated data transmission to the Remote
 	// But how do we avoid infinite "feedback"?
-	startThread();
 
-	// Call update on the OF loop event:
-	loopListener = ofGetMainLoop()->loopEvent.newListener([this]() {
-		update();
-	});
+	setAutoUpdate(true);
 }
 
-/**
- * @brief The server's setParameter method needs to be called on the main thread, which is achieved
- * by calling ofxParameterServer::update().
- */
+void Server::setAutoUpdate(bool autoUpdate)
+{
+	if (autoUpdate)
+	{
+		loopListener = ofGetMainLoop()->loopEvent.newListener([this]()
+															  {
+																  update();
+															  });
+	}
+	else
+	{
+		loopListener.reset();
+	}
+}
+
 void Server::update()
 {
+	while (oscReceiver.hasWaitingMessages())
+	{
+		ofxOscMessage inMsg;
+		oscReceiver.getNextMessage(inMsg);
+		parseMessage(inMsg);
+	}
 
-	std::unique_lock<std::mutex> lock(serverMutex);
 	std::unordered_map<std::string, std::string> pDataMap;
 	ParameterData parameterData;
 	while (parameterThreadChannel.tryReceive(parameterData))
 	{
 		pDataMap[parameterData.parameterPath] = parameterData.parameterValue;
-//		setParameter(parameterData.parameterPath, parameterData.parameterValue);
 	}
 	// Only send the last received data for a given path... otherwise things get way too spammy
 	for (auto& pair : pDataMap)
@@ -138,7 +152,7 @@ void Server::update()
 ofXml Server::createMetaModel()
 {
 	ofXml xml;
-	auto root = xml.appendChild(ModuleName);
+	auto root = xml.appendChild("ofxRemoteParameters");
 	auto paramsXml = root.appendChild("Parameters");
 	serializeParameterGroup(group, paramsXml);
 	auto methodsXml = root.appendChild("Methods");
@@ -179,8 +193,8 @@ void Server::serializeParameter(std::shared_ptr<ofAbstractParameter> parameter, 
 	catch (std::out_of_range e)
 	{
 		ofLogNotice(ModuleName) << "Tried adding parameter of unknown type: "
-								  << typeid(*parameter).name()
-								  << " Register the type with addType before adding such a parameter.";
+								<< typeid(*parameter).name()
+								<< " Register the type with addType before adding such a parameter.";
 		return;
 	}
 
@@ -222,7 +236,7 @@ void Server::setParameter(std::string path, std::string value)
 	if (pathComponents.size() < 2)
 	{
 		ofLogError(ModuleName) << "setParameter: path is too short. Path: "
-												<< path;
+							   << path;
 		return;
 	}
 
@@ -254,7 +268,7 @@ void Server::setParameter(std::string path, std::string value)
 		else
 		{
 			ofLogVerbose(ModuleName) << "setParameter: "
-					<< "Couldn't find parameter group. Trying custom deserializer";
+									 << "Couldn't find parameter group. Trying custom deserializer";
 			// Try a custom deserializer here?
 			useCustomDeserializer(path, value);
 			return;
@@ -286,7 +300,7 @@ bool Server::useCustomDeserializer(const std::string& path, const std::string& v
 	else
 	{
 		ofLogError(ModuleName) << "setParameter Couldn't deserialize parameter: "
-												<< path << "/" << value;
+							   << path << "/" << value;
 		return false;
 	}
 }
@@ -339,7 +353,7 @@ void Server::parseMessage(ofxOscMessage& m)
 
 	if (components.size() < 3) return;
 
-	if (components[1] == ApiRoot)
+	if (components[1] == ApiRoot.substr(1))
 	{
 		auto result = serverMethods.find(components[2]);
 		if (result != serverMethods.end())
@@ -349,22 +363,22 @@ void Server::parseMessage(ofxOscMessage& m)
 	}
 }
 
-void Server::threadedFunction()
-{
-	while (isThreadRunning())
-	{
-		serverMutex.lock();
-		while (oscReceiver.hasWaitingMessages())
-		{
-			ofxOscMessage inMsg;
-			oscReceiver.getNextMessage(inMsg);
-			parseMessage(inMsg);
-		}
-		serverMutex.unlock();
-		sleep(16);
-//		yield();
-	}
-}
+//void Server::threadedFunction()
+//{
+//	while (isThreadRunning())
+//	{
+//		serverMutex.lock();
+//		while (oscReceiver.hasWaitingMessages())
+//		{
+//			ofxOscMessage inMsg;
+//			oscReceiver.getNextMessage(inMsg);
+//			parseMessage(inMsg);
+//		}
+//		serverMutex.unlock();
+//		sleep(16);
+////		yield();
+//	}
+//}
 
 void Server::sendMessage(ofxOscMessage& m)
 {
@@ -373,8 +387,9 @@ void Server::sendMessage(ofxOscMessage& m)
 
 void Server::sendReply(ServerMethod& method, ofxOscMessage& m)
 {
-	m.setAddress("/" + ApiResponse + "/" + method.getIdentifier());
-	ofLogVerbose(ModuleName) << "Sending " << m << " to " << oscSender.getHost() + ":" + ofToString(oscSender.getPort());
+	m.setAddress(ApiResponse + "/" + method.getIdentifier());
+	ofLogVerbose(ModuleName) << "Sending " << m << " to "
+							 << oscSender.getHost() + ":" + ofToString(oscSender.getPort());
 	oscSender.sendMessage(m, false);
 }
 
