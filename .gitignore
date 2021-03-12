@@ -1,3 +1,7 @@
 .idea
 bin
 obj
+Build
+*.xcodeproj
+*-Info.plist
+*.xcconfig
