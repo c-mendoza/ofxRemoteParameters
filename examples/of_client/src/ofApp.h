@@ -1,7 +1,6 @@
 #pragma once
 
 #include "ofMain.h"
-#include "ofxParameterCollection.h"
 #include "ofxGui.h"
 #include "ofxRemoteParameters/Client.h"
 
