@@ -199,7 +199,7 @@ void Client::parseGroup(ofParameterGroup& paramGroup, ofXml& groupXml)
 			}
 
 		}
-		catch (std::out_of_range range)
+		catch (std::out_of_range& range)
 		{
 			ofLogWarning(LogModuleName) << "Type not found: " << type;
 		}
