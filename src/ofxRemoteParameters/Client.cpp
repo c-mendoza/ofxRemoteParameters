@@ -129,7 +129,7 @@ void Client::downloadModel()
 	oscSender.sendMessage(message, false);
 }
 
-void Client::parseModel(std::string xmlModel)
+void Client::parseModel(const std::string& xmlModel)
 {
 	ofXml xml;
 	xml.parse(xmlModel);

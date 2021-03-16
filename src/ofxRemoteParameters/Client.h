@@ -94,7 +94,7 @@ namespace ofxRemoteParameters
 
 	protected:
 		void parseReceivedMessage(ofxOscMessage& message);
-		void parseModel(std::string basicString);
+		void parseModel(const std::string& basicString);
 		void parseGroup(ofParameterGroup& paramGroup, ofXml& groupXml);
 		void setRemoteParameter(std::shared_ptr<ofAbstractParameter> p);
 	};
