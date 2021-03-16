@@ -3,7 +3,7 @@
 #include "ofMain.h"
 #include "ofxParameterCollection.h"
 #include "ofxGui.h"
-#include "ofxParameterServer.h"
+#include "ofxRemoteParameters/Client.h"
 
 class ofApp : public ofBaseApp {
 	
@@ -12,15 +12,15 @@ public:
 	void update();
 	void draw();
 	void exit();
+	void buildGui();
 
 	void connectButtonPressed();
-	
-	ofxOscReceiver oscReceiver;
-	ofxOscSender oscSender;
 
 	ofParameterGroup params;
 
 	ofxPanel gui;
 	ofxButton connectButton;
 
+	ofxRemoteParameters::Client paramClient;
+	ofEventListener modelLoadedEventListener;
 };
