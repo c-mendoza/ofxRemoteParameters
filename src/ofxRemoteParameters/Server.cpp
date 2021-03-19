@@ -78,8 +78,11 @@ Server::Server() : ofThread()
 	addParameterType<ofMatrix4x4>("ofMatrix4x4");
 
 	// Add ofParameterGroup "manually" because we don't want it boxed into an ofParameter:
+	TypeInfo paramInfo;
+	paramInfo.name = "group";
+	paramInfo.hasLimits = false;
 	auto result = typeRegistry
-			.insert({std::type_index(typeid(ofParameterGroup)), {.name = "group", .hasLimits = false}});
+			.insert({std::type_index(typeid(ofParameterGroup)), paramInfo});
 
 }
 
