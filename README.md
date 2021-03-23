@@ -6,7 +6,7 @@ This [openFrameworks](https://openframeworks.cc) addon provides a a straightforw
 * Platform-independent clients: Because it uses OSC, any client that follows the simple protocol can interface with your ofApp.
 * BYO UI: In OF you can use ofxGui or ofxImGui, which is just a simple matter of passing the ofParameterGroup to either of those UI addons.
 
-A mobile-compatible Flutter client is now available! Check out [RemoteRemote](https://github.com/c-mendoza/RemoteRemote) for more info.
+A mobile and desktop compatible Flutter client is now available! Check out [RemoteRemote](https://github.com/c-mendoza/RemoteRemote) for more info.
 
 ## Overview
 The addon has two classes, which are independent from one another:
