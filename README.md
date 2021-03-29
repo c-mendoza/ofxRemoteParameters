@@ -22,7 +22,7 @@ The Server can also respond to messages that can modify the model unidirectional
 ## Compatibility
 * Tested on OF 0.11.x, but should work on 0.10.x.
 * Probably not compatible with 0.9.x and earlier.
-* Tested on Mac and Linux, but should work on Windows.
+* Tested on Mac and Linux, and Windows.
 
 ## Quick Start
 1. Compile and run the `basic_server` example. Leave it running.
