@@ -2,7 +2,7 @@
 
 static std::string moduleName = "of_client";
 
-const static std::string SERVER_IP_ADDRESS = "192.168.1.13";
+const static std::string SERVER_IP_ADDRESS = "127.0.0.1";
 
 void ofApp::setup()
 {
