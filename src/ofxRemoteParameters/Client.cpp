@@ -230,7 +230,7 @@ void Client::setRemoteParameter(std::shared_ptr<ofAbstractParameter> p)
 	oscSender.sendMessage(message, false);
 }
 
-void Client::callServerMethod(std::string& methodName)
+void Client::callServerMethod(const std::string& methodName)
 {
 	ofxOscMessage message;
 	message.setAddress(ApiRoot + "/" + methodName);
