@@ -350,7 +350,6 @@ bool Server::sendMetaModel()
 void Server::parseMessage(ofxOscMessage& m)
 {
 	ofLogVerbose(ModuleName) << "address = " << m.getAddress();
-	ofLogVerbose(ModuleName) << "arg = " << m.getArgAsString(0);
 	for (int i = 0; i < m.getNumArgs(); i++)
 	{
 		ofLogVerbose("Server") << "arg " << i << " = " << m.getArgAsString(i);
