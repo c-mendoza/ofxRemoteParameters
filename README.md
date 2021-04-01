@@ -125,6 +125,8 @@ Send this to set the value of an ofParameter.
 <br>Outbound OSC Argument 1: Parameter value as a string.
 <br>Response: none.
 
+### close
+Closes the Server's OSC receiver and resets the OSC sender. No further communication with the Server will be possible until it is restarted using `Server::setup(...)`. 
 ### Model XML
 The model is sent as an XML string.
 The basic format is as follows:

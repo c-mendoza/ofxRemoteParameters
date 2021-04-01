@@ -14,11 +14,13 @@ public:
 	void buildGui();
 
 	void connectButtonPressed();
+	void closeButtonPressed();
 
 	ofParameterGroup params;
 
 	ofxPanel gui;
 	ofxButton connectButton;
+	ofxButton closeButton;
 
 	ofxRemoteParameters::Client paramClient;
 	ofEventListener modelLoadedEventListener;

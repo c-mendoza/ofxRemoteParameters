@@ -58,6 +58,17 @@ Server::Server() : ofThread()
 //				setParameter(inMessage.getArgAsString(0), inMessage.getArgAsString(1));
 			}));
 
+	addServerMethod(ServerMethod(
+			"close",
+			"Close server",
+			[this](ServerMethod& method, ofxOscMessage& inMessage, Server& server)
+			{
+				oscReceiver.stop();
+				oscSender.clear();
+				loopListener.reset();
+			}
+	));
+
 
 	// We can add here any value that OF has an ofToString for.
 	// Any other types you'll need to add externally

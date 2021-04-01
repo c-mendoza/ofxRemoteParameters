@@ -63,7 +63,7 @@ namespace ofxRemoteParameters
 		 * @brief Calls a Server Method of the given name.
 		 * @param methodName The name of the method.
 		 */
-		void callServerMethod(std::string& methodName);
+		void callServerMethod(const std::string& methodName);
 
 		/**
 		 * @brief Use this constant to exclusively set the ofLogLevel of the Client.
