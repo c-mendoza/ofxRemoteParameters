@@ -5,3 +5,9 @@ Build
 *.xcodeproj
 *-Info.plist
 *.xcconfig
+*.obj
+.vs
+*.sln
+*.vcxproj
+*.vcxproj.*
+*.rc

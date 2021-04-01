@@ -6,6 +6,8 @@ This [openFrameworks](https://openframeworks.cc) addon provides a a straightforw
 * Platform-independent clients: Because it uses OSC, any client that follows the simple protocol can interface with your ofApp.
 * BYO UI: In OF you can use ofxGui or ofxImGui, which is just a simple matter of passing the ofParameterGroup to either of those UI addons.
 
+A mobile and desktop compatible Flutter client is now available! Check out [RemoteRemote](https://github.com/c-mendoza/RemoteRemote) for more info.
+
 ## Overview
 The addon has two classes, which are independent from one another:
 * `ofxRemoteParameters::Server`, which serves a "model" that includes the ofParameterGroup.
@@ -20,7 +22,7 @@ The Server can also respond to messages that can modify the model unidirectional
 ## Compatibility
 * Tested on OF 0.11.x, but should work on 0.10.x.
 * Probably not compatible with 0.9.x and earlier.
-* Tested on Mac and Linux, but should work on Windows.
+* Tested on Mac and Linux, and Windows.
 
 ## Quick Start
 1. Compile and run the `basic_server` example. Leave it running.

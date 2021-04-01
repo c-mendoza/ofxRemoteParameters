@@ -356,7 +356,7 @@ void Server::parseMessage(ofxOscMessage& m)
 	}
 
 	auto components = ofSplitString(m.getAddress(),
-									ofToString((char) std::filesystem::path::preferred_separator),
+									ofToString('/'),
 									false,
 									true);
 	for (int j = 0; j < components.size(); ++j)
