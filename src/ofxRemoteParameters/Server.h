@@ -21,7 +21,7 @@ namespace ofxRemoteParameters
 	 * Note that the current implementation can respond to a single client at a time, but the Server will
 	 * react to messages sent to it from any source.
 	 */
-	class Server : public ofThread
+	class Server
 	{
 	public:
 		/**
@@ -140,6 +140,7 @@ namespace ofxRemoteParameters
 		void setParameter(std::string path, std::string value);
 		void addCustomDeserializer(std::string path,
 								   std::function<void(std::string serializedString)> customDeserializer);
+		void close();
 
 		struct TypeInfo
 		{

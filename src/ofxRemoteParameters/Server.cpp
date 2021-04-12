@@ -15,7 +15,7 @@ const std::string Server::NodeName_Min = "min";
 const std::string Server::NodeName_Max = "max";
 
 
-Server::Server() : ofThread()
+Server::Server()
 {
 	addServerMethod(ServerMethod(
 			"getModel",
@@ -63,9 +63,7 @@ Server::Server() : ofThread()
 			"Close server",
 			[this](ServerMethod& method, ofxOscMessage& inMessage, Server& server)
 			{
-				oscReceiver.stop();
-				oscSender.clear();
-				loopListener.reset();
+				close();
 			}
 	));
 
@@ -124,6 +122,13 @@ void Server::setup(ofParameterGroup& parameters,
 	// But how do we avoid infinite "feedback"?
 
 	setAutoUpdate(true);
+}
+
+void Server::close()
+{
+	oscReceiver.stop();
+	oscSender.clear();
+	loopListener.reset();
 }
 
 void Server::setAutoUpdate(bool autoUpdate)
