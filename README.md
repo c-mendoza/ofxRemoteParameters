@@ -13,9 +13,9 @@ The addon has two classes, which are independent from one another:
 * `ofxRemoteParameters::Server`, which serves a "model" that includes the ofParameterGroup.
 * `ofxRemoteParameters::Client`, which is an OF client implementation.
 
-The Server communicates to bi-directionally via OSC, and defines a simple API that is used to request data and handle responses. Upon connection, a client requests the model from the server; the model is an XML representation of an ofParameterGroup, with additional metadata for each ofParameter specifying type, name, minimum and maximum values, in addition to the value itself. Because of this, clients do not need to know the structure of the ofParameterGroup ahead of time, and can instead recreate it based on the sent metadata.
+The Server communicates bi-directionally via OSC, and defines a simple API that is used to request data and handle responses. Upon connection, a client requests the model from the server; the model is an XML representation of an ofParameterGroup, with additional metadata for each ofParameter specifying type, name, minimum and maximum values, in addition to the value itself. Because of this, clients do not need to know the structure of the ofParameterGroup ahead of time, and can instead recreate it based on the sent metadata.
 
-Once a client has the model representation, it can use it to create a local clone so that it can be manipulated. Changes can then be sent to the server.
+Once a client has the model representation, it can use it to create a local clone so that it can be manipulated. Any changes are sent to the server.
 
 The Server can also respond to messages that can modify the model unidirectionally (See Server API).
 
