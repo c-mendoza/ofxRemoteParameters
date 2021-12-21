@@ -1,6 +1,6 @@
 # ofxRemoteParameters
 
-This [openFrameworks](https://openframeworks.cc) addon provides a a straightforward way to remotely manipulate `ofParameters` via an OSC connection. It uses a client-server architecture, where the server is the `ofApp` you want to control remotely, and the client modifies the values of the `ofParameters`. The addon focuses on the following:
+This [openFrameworks](https://openframeworks.cc) addon provides a simple way to remotely manipulate `ofParameters` via an OSC connection. It uses a client-server architecture, where the server is the `ofApp` you want to control remotely, and the client modifies the values of the `ofParameters`. The addon focuses on the following:
 * Minimal code to get it running: You just call a setup function, and for most situations that is all you need to do.
 * Straightforward extensibility: Adding new data types is possible and simple.
 * Platform-independent clients: Because it uses OSC, any client that follows the simple protocol can interface with your ofApp.
