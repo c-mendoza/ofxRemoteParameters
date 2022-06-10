@@ -18,7 +18,7 @@ meta:
 	ADDON_NAME = ofxRemoteParameters
 	ADDON_DESCRIPTION = Serve ofParameters to remote clients via OSC
 	ADDON_AUTHOR = Cristobal Mendoza
-	ADDON_TAGS = "utilities"
+	ADDON_TAGS = "Web/Networking"
 	ADDON_URL = http://github.com/c-mendoza/ofxRemoteParameters
 
 common:
